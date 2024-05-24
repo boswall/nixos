@@ -1,0 +1,15 @@
+{
+  config,
+  pkgs,
+  options,
+  ...
+}: let
+  hostname = "ada"; # to alllow per-machine config
+in {
+  networking.hostName = hostname;
+
+  imports = [
+    /etc/nixos/hardware-configuration.nix
+    (/home/oatman/dotfiles/nixos + "/${hostname}.nix")
+  ];
+}
