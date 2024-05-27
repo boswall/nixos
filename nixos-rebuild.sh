@@ -5,7 +5,7 @@
 set -e
 
 # Edit your config
-$EDITOR configuration.nix
+$EDITOR ~/dotfiles/nixos/ada.nix
 
 # cd to your config dir
 pushd ~/dotfiles/nixos/
