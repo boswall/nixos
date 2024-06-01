@@ -47,13 +47,14 @@
   services.xserver.enable = true;
 
   # Enable the KDE Plasma Desktop Environment.
-  services.xserver.displayManager.sddm.enable = true;
-  services.xserver.desktopManager.plasma5.enable = true;
+  services.displayManager.sddm.enable = true;
+  services.displayManager.sddm.wayland.enable = true;
+  services.desktopManager.plasma6.enable = true;
 
   # Configure keymap in X11
-  services.xserver = {
+  services.xserver.xkb = {
     layout = "gb";
-    xkbVariant = "";
+    variant = "";
   };
 
   # Configure console keymap
@@ -123,9 +124,9 @@
     kate
     htop
     git
-    #neofetch
-    afetch
-    #fastfetch
+    neofetch
+    #afetch
+    fastfetch
     pkgs.terminator
     pkgs.zsh
     pkgs.php82
@@ -139,6 +140,7 @@
     slack
     whatsapp-for-linux
     teams-for-linux
+    zoom-us
     inkscape
     thunderbird
     (vscode-with-extensions.override {
