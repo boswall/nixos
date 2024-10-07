@@ -11,11 +11,14 @@
   #  ];
 
   # Bootloader.
-  boot.loader.grub.enable = true;
-  boot.loader.grub.device = "/dev/sda";
-  boot.loader.grub.useOSProber = true;
+  #boot.loader.grub.enable = true;
+  #boot.loader.grub.device = "/dev/nvme0n1";
+  #boot.loader.grub.useOSProber = true;
+  boot.loader.systemd-boot.enable = true;
 
-  #networking.hostName = "ada"; # Define your hostname.
+  boot.kernel.sysctl = { "vm.swappiness" = 10; };
+
+  # networking.hostName = "ada"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
   # Configure network proxy if necessary
@@ -24,6 +27,42 @@
 
   # Enable networking
   networking.networkmanager.enable = true;
+  networking.hosts = { "192.168.0.115" = [ "tower" ]; };
+  fileSystems."/mnt/tower/work" = {
+    device = "tower:/mnt/user/work";
+    options = [ "x-systemd.automount" "noauto" ];
+    fsType = "nfs";
+  };
+  services.rpcbind.enable = true; # needed for NFS
+  systemd.mounts = [{
+    type = "nfs";
+    mountConfig = {
+      Options = "noatime";
+    };
+    what = "tower:/mnt/user/work";
+    where = "/mnt/tower/work";
+  }];
+
+  systemd.automounts = [{
+    wantedBy = [ "multi-user.target" ];
+    automountConfig = {
+      TimeoutIdleSec = "600";
+    };
+    where = "/mnt/tower/work";
+  }];
+
+  # NVIDIA Drivers
+  hardware.opengl = {
+    enable = true;
+  };
+  services.xserver.videoDrivers = ["nvidia"];
+  hardware.nvidia = {
+    modesetting.enable = true;
+    powerManagement.enable = false;
+    open = false;
+    nvidiaSettings = true;
+    package = config.boot.kernelPackages.nvidiaPackages.stable;
+  };
 
   # Set your time zone.
   time.timeZone = "Europe/London";
@@ -50,6 +89,9 @@
   services.displayManager.sddm.enable = true;
   services.displayManager.sddm.wayland.enable = true;
   services.desktopManager.plasma6.enable = true;
+  programs.kdeconnect = {
+    enable = true;
+  };
 
   # Configure keymap in X11
   services.xserver.xkb = {
@@ -62,6 +104,14 @@
 
   # Enable CUPS to print documents.
   services.printing.enable = true;
+
+  # Enable Bluetooth
+  hardware.bluetooth.enable = true; # enables support for Bluetooth
+  hardware.bluetooth.powerOnBoot = true; # powers up the default Bluetooth controller on boot
+  # services.blueman.enable = true;
+
+  # hardware.xone.enable = true; # support for the xbox controller USB dongle
+  hardware.xpadneo.enable = true;
 
   # Enable sound with pipewire.
   sound.enable = true;
@@ -116,6 +166,20 @@
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
 
+  # Enable common container config files in /etc/containers
+  virtualisation.containers.enable = true;
+  virtualisation = {
+    podman = {
+      enable = true;
+
+      # Create a `docker` alias for podman, to use it as a drop-in replacement
+      dockerCompat = true;
+
+      # Required for containers under podman-compose to be able to talk to each other.
+      defaultNetwork.settings.dns_enabled = true;
+    };
+  };
+
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
@@ -124,6 +188,7 @@
     kate
     htop
     git
+    openrgb-with-all-plugins
     neofetch
     #afetch
     fastfetch
@@ -132,11 +197,20 @@
     pkgs.php82
     pkgs.php82Packages.composer
     pkgs.nodejs_20
+    dbeaver-bin
+    dive # look into docker image layers
+    podman-tui # status of containers in the terminal
+    docker-compose # start group of containers for dev
+    #podman-compose # start group of containers for dev
+    podman-desktop
     firefox
     google-chrome
     pkgs.barrier
     pkgs.filezilla
     pkgs.gnucash
+    libreoffice-qt
+    hunspell
+    hunspellDicts.en_GB-ise
     slack
     whatsapp-for-linux
     teams-for-linux
@@ -158,7 +232,22 @@
        bradlc.vscode-tailwindcss
       ];
     })
+
+    mangohud
+    steam-run
+    heroic
+    gogdl
+    #airshipper
+    (prismlauncher.override {
+      withWaylandGLFW=true;
+      jdks = [
+        temurin-bin-21
+      ];
+    })
   ];
+
+  # OpenRGB
+  services.hardware.openrgb.enable = true;
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
@@ -169,6 +258,15 @@
   # };
 
   # List services that you want to enable:
+
+  # Games
+  # Steam
+  programs.steam = {
+    enable = true;
+    remotePlay.openFirewall = true; # Open ports in the firewall for Steam Remote Play
+    dedicatedServer.openFirewall = true; # Open ports in the firewall for Source Dedicated Server
+    localNetworkGameTransfers.openFirewall = true; # Open ports in the firewall for Steam Local Network Game Transfers
+  };
 
   # Enable the OpenSSH daemon.
   # services.openssh.enable = true;
