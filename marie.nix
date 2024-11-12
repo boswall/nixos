@@ -130,6 +130,11 @@
     #media-session.enable = true;
   };
 
+  # Fonts
+  fonts.packages = with pkgs; [
+    (nerdfonts.override { fonts = [ "UbuntuMono" ]; })
+  ];
+
   # Enable touchpad support (enabled default in most desktopManager).
   # services.xserver.libinput.enable = true;
 
@@ -141,6 +146,7 @@
         autosuggestions.enable = true;
         zsh-autoenv.enable = true;
         syntaxHighlighting.enable = true;
+        shellInit = "fastfetch";
         ohMyZsh = {
           enable = true;
           theme = "robbyrussell";
@@ -208,6 +214,7 @@
     zoom-us
     inkscape
     thunderbird
+    bruno
     (vscode-with-extensions.override {
       vscode = vscodium;
       vscodeExtensions = with vscode-extensions; [
