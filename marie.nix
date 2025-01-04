@@ -1,14 +1,6 @@
-# Edit this configuration file to define what should be installed on
-# your system.  Help is available in the configuration.nix(5) man page
-# and in the NixOS manual (accessible by running ‘nixos-help’).
-
 { config, pkgs, ... }:
 
 {
-  #imports =
-  #  [ # Include the results of the hardware scan.
-  #    ./hardware-configuration.nix
-  #  ];
 
   # Bootloader.
   #boot.loader.grub.enable = true;
@@ -18,7 +10,6 @@
 
   boot.kernel.sysctl = { "vm.swappiness" = 10; };
 
-  # networking.hostName = "ada"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
   # Configure network proxy if necessary
@@ -50,19 +41,6 @@
     };
     where = "/mnt/tower/work";
   }];
-
-  # NVIDIA Drivers
-#   hardware.opengl = {
-#     enable = true;
-#   };
-#   services.xserver.videoDrivers = ["nvidia"];
-#   hardware.nvidia = {
-#     modesetting.enable = true;
-#     powerManagement.enable = false;
-#     open = false;
-#     nvidiaSettings = true;
-#     package = config.boot.kernelPackages.nvidiaPackages.stable;
-#   };
 
   # Set your time zone.
   time.timeZone = "Europe/London";
@@ -192,8 +170,6 @@
     kate
     htop
     git
-    neofetch
-    #afetch
     fastfetch
     pkgs.terminator
     pkgs.zsh
@@ -204,6 +180,7 @@
     firefox
     google-chrome
     pkgs.filezilla
+    docker-compose
     pkgs.gnucash
     libreoffice-qt
     hunspell
@@ -231,21 +208,9 @@
       ];
     })
 
-    # mangohud
     steam-run
     heroic
-    gogdl
-    #airshipper
-    (prismlauncher.override {
-      withWaylandGLFW=true;
-      jdks = [
-        temurin-bin-21
-      ];
-    })
   ];
-
-  # OpenRGB
-#   services.hardware.openrgb.enable = true;
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
