@@ -265,9 +265,9 @@
     gogdl
     #airshipper
     (prismlauncher.override {
-      withWaylandGLFW=true;
+      # withWaylandGLFW=true;
       jdks = [
-        temurin-bin-21
+        temurin-bin-23
         temurin-bin-8
       ];
     })
