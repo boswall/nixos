@@ -34,22 +34,41 @@
     fsType = "nfs";
   };
   services.rpcbind.enable = true; # needed for NFS
-  systemd.mounts = [{
-    type = "nfs";
-    mountConfig = {
-      Options = "noatime";
-    };
-    what = "tower:/mnt/user/work";
-    where = "/mnt/tower/work";
-  }];
+  systemd.mounts = [
+    {
+      type = "nfs";
+      mountConfig = {
+        Options = "noatime";
+      };
+      what = "tower:/mnt/user/work";
+      where = "/mnt/tower/work";
+    }
+    {
+      type = "nfs";
+      mountConfig = {
+        Options = "noatime";
+      };
+      what = "tower:/mnt/user/files";
+      where = "/mnt/tower/files";
+    }
+  ];
 
-  systemd.automounts = [{
-    wantedBy = [ "multi-user.target" ];
-    automountConfig = {
-      TimeoutIdleSec = "600";
-    };
-    where = "/mnt/tower/work";
-  }];
+  systemd.automounts = [
+    {
+      wantedBy = [ "multi-user.target" ];
+      automountConfig = {
+        TimeoutIdleSec = "600";
+      };
+      where = "/mnt/tower/work";
+    }
+    {
+      wantedBy = [ "multi-user.target" ];
+      automountConfig = {
+        TimeoutIdleSec = "600";
+      };
+      where = "/mnt/tower/files";
+    }
+  ];
 
   # NVIDIA Drivers
   hardware.opengl = {
