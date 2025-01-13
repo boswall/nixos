@@ -267,6 +267,7 @@
     (prismlauncher.override {
       # withWaylandGLFW=true;
       jdks = [
+        temurin-bin
         temurin-bin-23
         temurin-bin-8
       ];
