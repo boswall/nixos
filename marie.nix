@@ -92,7 +92,7 @@
   hardware.xpadneo.enable = true;
 
   # Enable sound with pipewire.
-  sound.enable = true;
+  # sound.enable = true;
   hardware.pulseaudio.enable = false;
   security.rtkit.enable = true;
   services.pipewire = {
@@ -180,7 +180,10 @@
     firefox
     google-chrome
     pkgs.filezilla
-    docker-compose
+    podman-tui # status of containers in the terminal
+    docker-compose # start group of containers for dev
+    #podman-compose # start group of containers for dev
+    podman-desktop
     pkgs.gnucash
     libreoffice-qt
     hunspell
@@ -209,7 +212,6 @@
     })
 
     steam-run
-    heroic
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
