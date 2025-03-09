@@ -272,6 +272,7 @@
     steam-run
     heroic
     gogdl
+    dolphin-emu
     #airshipper
     (prismlauncher.override {
       # withWaylandGLFW=true;
