@@ -282,6 +282,15 @@
         temurin-bin-8
       ];
     })
+    (retroarch.override {
+      cores = with libretro; [
+        genesis-plus-gx
+        snes9x
+        beetle-psx-hw
+        pcsx2
+        scummvm
+      ];
+    })
   ];
 
   # OpenRGB
