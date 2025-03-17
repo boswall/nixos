@@ -192,6 +192,8 @@
     whatsapp-for-linux
     teams-for-linux
     zoom-us
+    haruna
+    kdePackages.kdenlive
     inkscape
     thunderbird
     bruno
