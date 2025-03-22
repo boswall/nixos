@@ -146,7 +146,7 @@
     packages = with pkgs; [
     ];
   };
-  
+
   programs.git.config = {
     user.name = "Matt Rose";
     user.email = "matt@glaikit.co.uk";
@@ -219,7 +219,27 @@
       ];
     })
 
+    lmstudio
+
     steam-run
+
+    (prismlauncher.override {
+      # withWaylandGLFW=true;
+      jdks = [
+        temurin-bin
+        temurin-bin-23
+        temurin-bin-8
+      ];
+    })
+    (retroarch.override {
+      cores = with libretro; [
+        genesis-plus-gx
+        snes9x
+        beetle-psx-hw
+        pcsx2
+        scummvm
+      ];
+    })
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
