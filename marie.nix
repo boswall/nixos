@@ -145,10 +145,11 @@
     extraGroups = [ "networkmanager" "wheel" ];
     packages = with pkgs; [
     ];
-    programs.git.config = {
-      user.name = "Matt Rose";
-      user.email = "matt@glaikit.co.uk";
-    }
+  };
+  
+  programs.git.config = {
+    user.name = "Matt Rose";
+    user.email = "matt@glaikit.co.uk";
   };
 
   # Allow unfree packages
