@@ -192,6 +192,7 @@
     whatsapp-for-linux
     teams-for-linux
     zoom-us
+    supersonic-wayland
     haruna
     kdePackages.kdenlive
     inkscape
