@@ -25,22 +25,56 @@
     fsType = "nfs";
   };
   services.rpcbind.enable = true; # needed for NFS
-  systemd.mounts = [{
-    type = "nfs";
-    mountConfig = {
-      Options = "noatime";
-    };
-    what = "tower:/mnt/user/work";
-    where = "/mnt/tower/work";
-  }];
+  systemd.mounts = [
+    {
+      type = "nfs";
+      mountConfig = {
+        Options = "noatime";
+      };
+      what = "tower:/mnt/user/work";
+      where = "/mnt/tower/work";
+    }
+    {
+      type = "nfs";
+      mountConfig = {
+        Options = "noatime";
+      };
+      what = "tower:/mnt/user/pictures";
+      where = "/mnt/tower/pictures";
+    }
+    {
+      type = "nfs";
+      mountConfig = {
+        Options = "noatime";
+      };
+      what = "tower:/mnt/user/backup";
+      where = "/mnt/tower/backup";
+    }
+  ];
 
-  systemd.automounts = [{
-    wantedBy = [ "multi-user.target" ];
-    automountConfig = {
-      TimeoutIdleSec = "600";
-    };
-    where = "/mnt/tower/work";
-  }];
+  systemd.automounts = [
+    {
+      wantedBy = [ "multi-user.target" ];
+      automountConfig = {
+        TimeoutIdleSec = "600";
+      };
+      where = "/mnt/tower/work";
+    }
+    {
+      wantedBy = [ "multi-user.target" ];
+      automountConfig = {
+        TimeoutIdleSec = "600";
+      };
+      where = "/mnt/tower/pictures";
+    }
+    {
+      wantedBy = [ "multi-user.target" ];
+      automountConfig = {
+        TimeoutIdleSec = "600";
+      };
+      where = "/mnt/tower/backup";
+    }
+  ];
 
   # Set your time zone.
   time.timeZone = "Europe/London";
@@ -200,6 +234,7 @@
     supersonic-wayland
     haruna
     kdePackages.kdenlive
+    digikam
     inkscape
     thunderbird
     bruno
