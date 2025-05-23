@@ -53,25 +53,25 @@
     }
   ];
 
-  systemd.automounts = [
-    {
-      wantedBy = [ "multi-user.target" ];
-      automountConfig = {
-        TimeoutIdleSec = "600";
-      };
-      where = "/mnt/tower/work";
-    }
-    {
-      wantedBy = [ "multi-user.target" ];
-      automountConfig = {
-        TimeoutIdleSec = "600";
-      };
-      where = "/mnt/tower/files";
-    }
-  ];
+#  systemd.automounts = [
+#    {
+#      wantedBy = [ "multi-user.target" ];
+#      automountConfig = {
+#        TimeoutIdleSec = "600";
+ #     };
+  #    where = "/mnt/tower/work";
+#    }
+#    {
+#      wantedBy = [ "multi-user.target" ];
+#      automountConfig = {
+#        TimeoutIdleSec = "600";
+#      };
+#      where = "/mnt/tower/files";
+#    }
+#  ];
 
   # NVIDIA Drivers
-  hardware.opengl = {
+  hardware.graphics = {
     enable = true;
   };
   services.xserver.videoDrivers = ["nvidia"];
@@ -165,7 +165,19 @@
         autosuggestions.enable = true;
         zsh-autoenv.enable = true;
         syntaxHighlighting.enable = true;
-        shellInit = "fastfetch";
+        shellInit = "fastfetch --data ' \$1
+⠀⠀⠀⠀⢀⣠⣴⣶⣿⣿⣿⣿⣷⣶⣄⡀⠀⠀⠀⢰⣶⣶⣶⣶⠀⠀⠀⠀⠀⠀⠀⠀\$2⣴⣶⣶⣶\$1⠀⠀⠀⠀
+⠀⠀⢀⣴⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⡄⠀⠀⣼⣿⣿⣿⡏⠀⠀⠀⠀⠀⠀⠀⠀\$2⣿⣿⣿⡟\$1⠀⠀⠀⠀
+⠀⣰⣿⣿⣿⣿⡿⠟⠋⠉⠙⠻⣿⣿⣿⣿⣿⡀⢀⣿⣿⣿⣿⠃⠀⠀⠀⠀⠀⠀⠀\$2⢸⣿⣿⣿⡇\$1⠀⠀⠀⠀
+⢰⣿⣿⣿⣿⠏⠀⠀⠀⠀⠀⠀⠈⠉⠉⠉⠉⠁⢸⣿⣿⣿⣿⠀⠀⠀\$2⢠⣤⣤⣤⣤⣼⣿⣿⣿⣤⣤⣤⣤⡤\$1
+⣿⣿⣿⣿⡟⠀⠀⠀⢠⣿⣿⣿⣿⣿⣿⣿⣿⠃⣾⣿⣿⣿⡇⠀⠀⠀\$2⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡇\$1
+⣿⣿⣿⣿⣷⠀⠀⠀⢸⣿⣿⣿⣿⣿⣿⣿⡟⢀⣿⣿⣿⣿⠃⠀⠀\$2⠐⠛⠛⠛⠛⢻⣿⣿⣿⡟⠛⠛⠛⠛⠃\$1
+⢻⣿⣿⣿⣿⣷⣄⣀⣀⣠⣴⣾⣿⣿⣿⡿⠁⢸⣿⣿⣿⣿⣀⣀⣀⣀⣀⣀⠀⠀\$2⣾⣿⣿⣿\$1⠀⠀⠀⠀⠀⠀
+⠈⠻⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠟⠀⠀⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿⡇⠀\$2⢀⣿⣿⣿⡏\$1⠀⠀⠀⠀⠀⠀
+⠀⠀⠈⠛⠿⢿⣿⣿⣿⡿⠿⠟⠋⠀⠀⠀⢀⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠁⠀\$2⠸⠿⠿⠿⠇\$1⠀⠀⠀⠀
+
+            \$2GOOD  LIFE  PLUS\$1
+ '";
         ohMyZsh = {
           enable = true;
           theme = "robbyrussell";
@@ -238,7 +250,7 @@
     hunspellDicts.en_GB-ise
     slack
     whatsapp-for-linux
-    teams-for-linux
+    # teams-for-linux
     zoom-us
     inkscape
     thunderbird
@@ -273,7 +285,7 @@
     heroic
     gogdl
     dolphin-emu
-    #airshipper
+    airshipper
     (prismlauncher.override {
       # withWaylandGLFW=true;
       jdks = [
@@ -286,7 +298,7 @@
       cores = with libretro; [
         genesis-plus-gx
         snes9x
-        beetle-psx-hw
+        beetle-psx
         pcsx2
         scummvm
       ];
@@ -314,6 +326,12 @@
     dedicatedServer.openFirewall = true; # Open ports in the firewall for Source Dedicated Server
     localNetworkGameTransfers.openFirewall = true; # Open ports in the firewall for Steam Local Network Game Transfers
   };
+
+  # Dirty hack to make nix build
+  nixpkgs.config.permittedInsecurePackages = [
+    "electron-33.4.11"
+  ];
+
 
   # Enable the OpenSSH daemon.
   # services.openssh.enable = true;
