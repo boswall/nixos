@@ -127,7 +127,7 @@
 
   # Enable sound with pipewire.
   # sound.enable = true;
-  hardware.pulseaudio.enable = false;
+  services.pulseaudio.enable = false;
   security.rtkit.enable = true;
   services.pipewire = {
     enable = true;
@@ -144,7 +144,8 @@
 
   # Fonts
   fonts.packages = with pkgs; [
-    (nerdfonts.override { fonts = [ "UbuntuMono" ]; })
+    # (nerdfonts.override { fonts = [ "UbuntuMono" ]; })
+    pkgs.nerd-fonts.ubuntu-mono
   ];
 
   # Enable touchpad support (enabled default in most desktopManager).
@@ -218,7 +219,7 @@
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
-    kate
+    kdePackages.kate
     htop
     git
     fastfetch
@@ -278,15 +279,13 @@
         temurin-bin-8
       ];
     })
-    (retroarch.override {
-      cores = with libretro; [
-        genesis-plus-gx
-        snes9x
-        beetle-psx-hw
-        pcsx2
-        scummvm
-      ];
-    })
+    (retroarch.withCores (cores: with cores; [
+      genesis-plus-gx
+      snes9x
+      beetle-psx-hw
+      pcsx2
+      scummvm
+    ]))
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
