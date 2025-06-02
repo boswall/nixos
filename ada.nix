@@ -134,7 +134,7 @@
   hardware.xpadneo.enable = true;
 
   # Enable sound with pipewire.
-  hardware.pulseaudio.enable = false;
+  services.pulseaudio.enable = false;
   security.rtkit.enable = true;
   services.pipewire = {
     enable = true;
@@ -151,7 +151,8 @@
 
     # Fonts
   fonts.packages = with pkgs; [
-    (nerdfonts.override { fonts = [ "UbuntuMono" ]; })
+    # (nerdfonts.override { fonts = [ "UbuntuMono" ]; })
+    pkgs.nerd-fonts.ubuntu-mono
   ];
 
   # Enable touchpad support (enabled default in most desktopManager).
@@ -222,7 +223,7 @@
   environment.systemPackages = with pkgs; [
   #  vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
   #  wget
-    kate
+    kdePackages.kate
     htop
     git
     openrgb-with-all-plugins
@@ -294,15 +295,13 @@
         temurin-bin-8
       ];
     })
-    (retroarch.override {
-      cores = with libretro; [
-        genesis-plus-gx
-        snes9x
-        beetle-psx
-        pcsx2
-        scummvm
-      ];
-    })
+    (retroarch.withCores (cores: with cores; [
+      genesis-plus-gx
+      snes9x
+      beetle-psx
+      pcsx2
+      scummvm
+    ]))
   ];
 
   # OpenRGB

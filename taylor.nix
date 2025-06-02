@@ -119,7 +119,7 @@
   #services.printing.enable = true;
 
   # Enable sound with pipewire.
-  hardware.pulseaudio.enable = false;
+  services.pulseaudio.enable = false;
   security.rtkit.enable = true;
   services.pipewire = {
     enable = true;
@@ -184,14 +184,13 @@
         temurin-bin-8
       ];
     })
-    (retroarch.override {
-      cores = with libretro; [
-        genesis-plus-gx
-        snes9x
-        beetle-psx-hw
-        pcsx2
-      ];
-    })
+    (retroarch.withCores (cores: with cores; [
+      genesis-plus-gx
+      snes9x
+      beetle-psx
+      pcsx2
+      scummvm
+    ]))
     (pkgs.wrapOBS {
       plugins = with pkgs.obs-studio-plugins; [
         wlrobs
