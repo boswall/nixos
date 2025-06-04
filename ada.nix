@@ -227,7 +227,7 @@
     htop
     git
     openrgb-with-all-plugins
-    neofetch
+    #neofetch
     #afetch
     fastfetch
     pkgs.terminator
@@ -250,9 +250,10 @@
     hunspell
     hunspellDicts.en_GB-ise
     slack
-    whatsapp-for-linux
+    #whatsapp-for-linux
     # teams-for-linux
     zoom-us
+    supersonic-wayland
     inkscape
     thunderbird
     bruno
