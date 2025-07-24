@@ -254,6 +254,7 @@
     # teams-for-linux
     zoom-us
     supersonic-wayland
+    jellyfin-media-player
     inkscape
     thunderbird
     bruno
