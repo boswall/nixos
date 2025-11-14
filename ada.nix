@@ -134,7 +134,7 @@
   hardware.xpadneo.enable = true;
 
   # Enable sound with pipewire.
-  hardware.pulseaudio.enable = false;
+  services.pulseaudio.enable = false;
   security.rtkit.enable = true;
   services.pipewire = {
     enable = true;
@@ -151,7 +151,8 @@
 
     # Fonts
   fonts.packages = with pkgs; [
-    (nerdfonts.override { fonts = [ "UbuntuMono" ]; })
+    # (nerdfonts.override { fonts = [ "UbuntuMono" ]; })
+    pkgs.nerd-fonts.ubuntu-mono
   ];
 
   # Enable touchpad support (enabled default in most desktopManager).
@@ -222,11 +223,11 @@
   environment.systemPackages = with pkgs; [
   #  vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
   #  wget
-    kate
+    kdePackages.kate
     htop
     git
     openrgb-with-all-plugins
-    neofetch
+    #neofetch
     #afetch
     fastfetch
     pkgs.terminator
@@ -249,9 +250,11 @@
     hunspell
     hunspellDicts.en_GB-ise
     slack
-    whatsapp-for-linux
+    #whatsapp-for-linux
     # teams-for-linux
     zoom-us
+    supersonic-wayland
+    jellyfin-media-player
     inkscape
     thunderbird
     bruno
@@ -294,15 +297,13 @@
         temurin-bin-8
       ];
     })
-    (retroarch.override {
-      cores = with libretro; [
-        genesis-plus-gx
-        snes9x
-        beetle-psx
-        pcsx2
-        scummvm
-      ];
-    })
+    (retroarch.withCores (cores: with cores; [
+      genesis-plus-gx
+      snes9x
+      beetle-psx
+      pcsx2
+      scummvm
+    ]))
   ];
 
   # OpenRGB
@@ -327,6 +328,13 @@
     localNetworkGameTransfers.openFirewall = true; # Open ports in the firewall for Steam Local Network Game Transfers
   };
 
+  services.sunshine = {
+    enable = true;
+    autoStart = true;
+    capSysAdmin = true;
+    openFirewall = true;
+  };
+
   # Dirty hack to make nix build
   nixpkgs.config.permittedInsecurePackages = [
     "electron-33.4.11"
@@ -334,7 +342,13 @@
 
 
   # Enable the OpenSSH daemon.
-  # services.openssh.enable = true;
+  services.openssh = {
+    enable = true;
+    settings = {
+      PasswordAuthentication = true;
+      PermitRootLogin = "no"; # "yes", "without-password", "prohibit-password", "forced-commands-only", "no"
+    };
+  };
 
   # Open ports in the firewall.
   # networking.firewall.allowedTCPPorts = [ ... ];
