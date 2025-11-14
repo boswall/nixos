@@ -18,7 +18,38 @@
 
   # Enable networking
   networking.networkmanager.enable = true;
-  networking.hosts = { "192.168.0.115" = [ "tower" ]; };
+  networking.hosts = {
+    "192.168.0.115" = [ "tower" ];
+    "127.0.0.1" = [
+      "app.goodlife.local"
+      "portal.goodlife.local"
+      "api.goodlife.local"
+      "glide.goodlife.local"
+      "leads.goodlife.local"
+      "cms.goodlife.local"
+      "logs.goodlife.local"
+      "phpmyadmin.goodlife.local"
+    ];
+  };
+  networking.firewall = {
+    enable = true;
+    allowedTCPPorts = [ 80 443 9001 9002 ];
+    extraCommands = ''
+      # Redirect port 80 to 9001
+      iptables -t nat -A PREROUTING -p tcp --dport 80 -j REDIRECT --to-ports 9001
+      # Redirect port 443 to 9002
+      iptables -t nat -A PREROUTING -p tcp --dport 443 -j REDIRECT --to-ports 9002
+      # For local connections (from the same machine)
+      iptables -t nat -A OUTPUT -p tcp -d 127.0.0.1 --dport 80 -j REDIRECT --to-ports 9001
+      iptables -t nat -A OUTPUT -p tcp -d 127.0.0.1 --dport 443 -j REDIRECT --to-ports 9002
+    '';
+    extraStopCommands = ''
+      iptables -t nat -D PREROUTING -p tcp --dport 80 -j REDIRECT --to-ports 9001 2>/dev/null || true
+      iptables -t nat -D PREROUTING -p tcp --dport 443 -j REDIRECT --to-ports 9002 2>/dev/null || true
+      iptables -t nat -D OUTPUT -p tcp -d 127.0.0.1 --dport 80 -j REDIRECT --to-ports 9001 2>/dev/null || true
+      iptables -t nat -D OUTPUT -p tcp -d 127.0.0.1 --dport 443 -j REDIRECT --to-ports 9002 2>/dev/null || true
+    '';
+  };
   fileSystems."/mnt/tower/work" = {
     device = "tower:/mnt/user/work";
     options = [ "x-systemd.automount" "noauto" ];
@@ -75,6 +106,8 @@
       where = "/mnt/tower/backup";
     }
   ];
+
+  security.pki.certificateFiles = [ /home/matt/Sites/gl/goodlife-docker/certs/ca/ca-cert.pem ];
 
   # Set your time zone.
   time.timeZone = "Europe/London";
