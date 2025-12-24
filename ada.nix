@@ -27,7 +27,51 @@
 
   # Enable networking
   networking.networkmanager.enable = true;
-  networking.hosts = { "192.168.0.115" = [ "tower" ]; };
+  networking.hosts = {
+    "192.168.0.115" = [ "tower" ];
+    "127.0.0.1" = [
+      "goodlife.local"
+      "app.goodlife.local"
+      "portal.goodlife.local"
+      "api.goodlife.local"
+      "glide.goodlife.local"
+      "leads.goodlife.local"
+      "cms.goodlife.local"
+      "logs.goodlife.local"
+      "phpmyadmin.goodlife.local"
+    ];
+    "::1" = [
+      "goodlife.local"
+      "app.goodlife.local"
+      "portal.goodlife.local"
+      "api.goodlife.local"
+      "glide.goodlife.local"
+      "leads.goodlife.local"
+      "cms.goodlife.local"
+      "logs.goodlife.local"
+      "phpmyadmin.goodlife.local"
+    ];
+  };
+  networking.firewall = {
+    enable = true;
+    allowedTCPPorts = [ 80 443 9001 9002 ];
+    extraCommands = ''
+      # Redirect port 80 to 9001
+      iptables -t nat -A PREROUTING -p tcp --dport 80 -j REDIRECT --to-ports 9001
+      # Redirect port 443 to 9002
+      iptables -t nat -A PREROUTING -p tcp --dport 443 -j REDIRECT --to-ports 9002
+      # For local connections (from the same machine)
+      iptables -t nat -A OUTPUT -p tcp -d 127.0.0.1 --dport 80 -j REDIRECT --to-ports 9001
+      iptables -t nat -A OUTPUT -p tcp -d 127.0.0.1 --dport 443 -j REDIRECT --to-ports 9002
+    '';
+    extraStopCommands = ''
+      iptables -t nat -D PREROUTING -p tcp --dport 80 -j REDIRECT --to-ports 9001 2>/dev/null || true
+      iptables -t nat -D PREROUTING -p tcp --dport 443 -j REDIRECT --to-ports 9002 2>/dev/null || true
+      iptables -t nat -D OUTPUT -p tcp -d 127.0.0.1 --dport 80 -j REDIRECT --to-ports 9001 2>/dev/null || true
+      iptables -t nat -D OUTPUT -p tcp -d 127.0.0.1 --dport 443 -j REDIRECT --to-ports 9002 2>/dev/null || true
+    '';
+  };
+  security.pki.certificateFiles = [ /home/matt/sites/goodlife/goodlife-docker/certs/ca/ca-cert.pem ];
   fileSystems."/mnt/tower/work" = {
     device = "tower:/mnt/user/work";
     options = [ "x-systemd.automount" "noauto" ];
@@ -218,6 +262,9 @@
     };
   };
 
+  # Enable the Flakes feature and the accompanying new nix command-line tool
+  # nix.settings.experimental-features = [ "nix-command" "flakes" ];
+
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
@@ -226,7 +273,7 @@
     kdePackages.kate
     htop
     git
-    openrgb-with-all-plugins
+    # openrgb-with-all-plugins
     #neofetch
     #afetch
     fastfetch
@@ -234,7 +281,7 @@
     pkgs.zsh
     pkgs.php82
     pkgs.php82Packages.composer
-    pkgs.nodejs_20
+    pkgs.nodejs_22
     dbeaver-bin
     dive # look into docker image layers
     podman-tui # status of containers in the terminal
@@ -243,7 +290,6 @@
     podman-desktop
     firefox
     google-chrome
-    pkgs.barrier
     pkgs.filezilla
     pkgs.gnucash
     libreoffice-qt
@@ -292,22 +338,24 @@
     (prismlauncher.override {
       # withWaylandGLFW=true;
       jdks = [
-        temurin-bin
-        temurin-bin-23
-        temurin-bin-8
+        javaPackages.compiler.temurin-bin.jdk-25
+        javaPackages.compiler.temurin-bin.jre-21
+        javaPackages.compiler.temurin-bin.jre-17
+        javaPackages.compiler.temurin-bin.jre-11
+        javaPackages.compiler.temurin-bin.jre-8
       ];
     })
-    (retroarch.withCores (cores: with cores; [
-      genesis-plus-gx
-      snes9x
-      beetle-psx
-      pcsx2
-      scummvm
-    ]))
+    # (retroarch.withCores (cores: with cores; [
+    #   genesis-plus-gx
+    #   snes9x
+    #   beetle-psx
+    #   pcsx2
+    #   scummvm
+    # ]))
   ];
 
   # OpenRGB
-  services.hardware.openrgb.enable = true;
+  # services.hardware.openrgb.enable = true;
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
@@ -330,7 +378,7 @@
 
   services.sunshine = {
     enable = true;
-    autoStart = true;
+    autoStart = false;
     capSysAdmin = true;
     openFirewall = true;
   };
@@ -338,6 +386,7 @@
   # Dirty hack to make nix build
   nixpkgs.config.permittedInsecurePackages = [
     "electron-33.4.11"
+    "mbedtls-2.28.10"
   ];
 
 
@@ -355,6 +404,7 @@
   # networking.firewall.allowedUDPPorts = [ ... ];
   # Or disable the firewall altogether.
   # networking.firewall.enable = false;
+  # networking.firewall.allowedTCPPorts = [ 80 443 ];
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
