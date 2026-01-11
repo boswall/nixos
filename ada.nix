@@ -304,6 +304,7 @@
     inkscape
     thunderbird
     bruno
+    opencode
     (vscode-with-extensions.override {
       vscode = vscodium;
       vscodeExtensions = with vscode-extensions; [
