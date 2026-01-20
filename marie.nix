@@ -274,16 +274,17 @@
     hunspell
     hunspellDicts.en_GB-ise
     slack
-    whatsapp-for-linux
-    teams-for-linux
-    zoom-us
+    # whatsapp-for-linux
+    # teams-for-linux
+    # zoom-us
     supersonic-wayland
     haruna
-    kdePackages.kdenlive
+    # kdePackages.kdenlive
     digikam
     inkscape
     thunderbird
     bruno
+    qwen-code
     (vscode-with-extensions.override {
       vscode = vscodium;
       vscodeExtensions = with vscode-extensions; [
@@ -307,9 +308,11 @@
     (prismlauncher.override {
       # withWaylandGLFW=true;
       jdks = [
-        temurin-bin
-        temurin-bin-23
-        temurin-bin-8
+        javaPackages.compiler.temurin-bin.jdk-25
+        javaPackages.compiler.temurin-bin.jre-21
+        javaPackages.compiler.temurin-bin.jre-17
+        javaPackages.compiler.temurin-bin.jre-11
+        javaPackages.compiler.temurin-bin.jre-8
       ];
     })
     (retroarch.withCores (cores: with cores; [
