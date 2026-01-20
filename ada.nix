@@ -97,22 +97,22 @@
     }
   ];
 
-#  systemd.automounts = [
-#    {
-#      wantedBy = [ "multi-user.target" ];
-#      automountConfig = {
-#        TimeoutIdleSec = "600";
- #     };
-  #    where = "/mnt/tower/work";
-#    }
-#    {
-#      wantedBy = [ "multi-user.target" ];
-#      automountConfig = {
-#        TimeoutIdleSec = "600";
-#      };
-#      where = "/mnt/tower/files";
-#    }
-#  ];
+ systemd.automounts = [
+   {
+     wantedBy = [ "multi-user.target" ];
+     automountConfig = {
+       TimeoutIdleSec = "600";
+     };
+     where = "/mnt/tower/work";
+   }
+   {
+     wantedBy = [ "multi-user.target" ];
+     automountConfig = {
+       TimeoutIdleSec = "600";
+     };
+     where = "/mnt/tower/files";
+   }
+ ];
 
   # NVIDIA Drivers
   hardware.graphics = {
@@ -304,6 +304,8 @@
     inkscape
     thunderbird
     bruno
+    opencode
+    warp-terminal
     (vscode-with-extensions.override {
       vscode = vscodium;
       vscodeExtensions = with vscode-extensions; [
