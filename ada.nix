@@ -271,17 +271,15 @@
   #  vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
   #  wget
     kdePackages.kate
+    kdePackages.filelight
     htop
     git
-    # openrgb-with-all-plugins
-    #neofetch
-    #afetch
     fastfetch
     pkgs.terminator
     pkgs.zsh
-    pkgs.php82
-    pkgs.php82Packages.composer
-    pkgs.nodejs_22
+    pkgs.php84
+    pkgs.php84Packages.composer
+    pkgs.nodejs_24
     dbeaver-bin
     dive # look into docker image layers
     podman-tui # status of containers in the terminal
@@ -304,7 +302,9 @@
     inkscape
     thunderbird
     bruno
+    haruna
     opencode
+    qwen-code
     warp-terminal
     (vscode-with-extensions.override {
       vscode = vscodium;
