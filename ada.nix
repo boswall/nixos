@@ -261,6 +261,10 @@
       defaultNetwork.settings.dns_enabled = true;
     };
   };
+  virtualisation.virtualbox.host.enable = true;
+  virtualisation.virtualbox.host.enableExtensionPack = true;
+  virtualisation.virtualbox.guest.dragAndDrop = true;
+  users.extraGroups.vboxusers.members = [ "matt" ];
 
   # Enable the Flakes feature and the accompanying new nix command-line tool
   # nix.settings.experimental-features = [ "nix-command" "flakes" ];
