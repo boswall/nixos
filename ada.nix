@@ -54,7 +54,7 @@
   };
   networking.firewall = {
     enable = true;
-    allowedTCPPorts = [ 80 443 9001 9002 ];
+    allowedTCPPorts = [ 80 443 1234 9001 9002 ];
     extraCommands = ''
       # Redirect port 80 to 9001
       iptables -t nat -A PREROUTING -p tcp --dport 80 -j REDIRECT --to-ports 9001
@@ -359,6 +359,9 @@
     #   scummvm
     # ]))
   ];
+
+  # Flatpak
+  services.flatpak.enable = true;
 
   # OpenRGB
   # services.hardware.openrgb.enable = true;
