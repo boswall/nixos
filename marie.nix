@@ -298,6 +298,13 @@
        #ikappas.phpcs
        #quick-lint.quick-lint-js
        bradlc.vscode-tailwindcss
+      ] ++ pkgs.vscode-utils.extensionsFromVscodeMarketplace [
+        {
+          name = "laravel-extra-intellisense";
+          publisher = "amiralizadeh9480";
+          version = "0.7.2";
+          sha256 = "sha256-MNU1CoY6gXPdWbhiRn0GVvwAUJh4Pnt486s5Ld1Qf5Q=";
+        }
       ];
     })
 
