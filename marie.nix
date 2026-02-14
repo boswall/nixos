@@ -256,20 +256,21 @@
     htop
     git
     fastfetch
-    pkgs.terminator
-    pkgs.zsh
-    pkgs.php82
-    pkgs.php82Packages.composer
-    pkgs.nodejs_20
+    terminator
+    zsh
+    php84
+    php84Packages.composer
+    php84Packages.php-codesniffer
+    nodejs_20
     dbeaver-bin
     firefox
     google-chrome
-    pkgs.filezilla
+    filezilla
     podman-tui # status of containers in the terminal
     docker-compose # start group of containers for dev
     #podman-compose # start group of containers for dev
     podman-desktop
-    pkgs.gnucash
+    gnucash
     libreoffice-qt
     hunspell
     hunspellDicts.en_GB-ise
@@ -290,12 +291,9 @@
       vscodeExtensions = with vscode-extensions; [
        bbenoist.nix
        eamodio.gitlens
-       #rangav.vscode-thunder-client
        catppuccin.catppuccin-vsc
        #onecentlin.laravel-blade
-       #amiralizadeh9480.laravel-extra-intellisense
        pkief.material-icon-theme
-       #ikappas.phpcs
        #quick-lint.quick-lint-js
        bradlc.vscode-tailwindcss
       ] ++ pkgs.vscode-utils.extensionsFromVscodeMarketplace [
@@ -305,8 +303,22 @@
           version = "0.7.2";
           sha256 = "sha256-MNU1CoY6gXPdWbhiRn0GVvwAUJh4Pnt486s5Ld1Qf5Q=";
         }
+        {
+          name = "vscode-phpsab";
+          publisher = "ValeryanM";
+          version = "0.0.23";
+          sha256 = "sha256-QyKqQ0S5kLYfgYipXCoZ94fJqyETCcAdL8JNYAG3CA0=";
+        }
+        {
+          name = "vscode-intelephense-client";
+          publisher = "bmewburn";
+          version = "1.17.0";
+          sha256 = "sha256-sX0OcKcYk1z/pp35PJUVi7BJlQXtMfN80z1PmuChXFI=";
+        }
       ];
     })
+
+    # nix store prefetch-file https://marketplace.visualstudio.com/_apis/public/gallery/publishers/bmewburn/vsextensions/vscode-intelephense-client/1.17.0/vspackage --extra-experimental-features nix-command
 
     lmstudio
 
