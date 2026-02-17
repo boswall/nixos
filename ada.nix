@@ -315,16 +315,34 @@
       vscodeExtensions = with vscode-extensions; [
        bbenoist.nix
        eamodio.gitlens
-       #rangav.vscode-thunder-client
        catppuccin.catppuccin-vsc
        #onecentlin.laravel-blade
-       #amiralizadeh9480.laravel-extra-intellisense
        pkief.material-icon-theme
-       #ikappas.phpcs
        #quick-lint.quick-lint-js
        bradlc.vscode-tailwindcss
+      ] ++ pkgs.vscode-utils.extensionsFromVscodeMarketplace [
+        {
+          name = "laravel-extra-intellisense";
+          publisher = "amiralizadeh9480";
+          version = "0.7.2";
+          sha256 = "sha256-MNU1CoY6gXPdWbhiRn0GVvwAUJh4Pnt486s5Ld1Qf5Q=";
+        }
+        {
+          name = "vscode-phpsab";
+          publisher = "ValeryanM";
+          version = "0.0.23";
+          sha256 = "sha256-QyKqQ0S5kLYfgYipXCoZ94fJqyETCcAdL8JNYAG3CA0=";
+        }
+        {
+          name = "vscode-intelephense-client";
+          publisher = "bmewburn";
+          version = "1.17.0";
+          sha256 = "sha256-sX0OcKcYk1z/pp35PJUVi7BJlQXtMfN80z1PmuChXFI=";
+        }
       ];
     })
+
+    # nix store prefetch-file https://marketplace.visualstudio.com/_apis/public/gallery/publishers/bmewburn/vsextensions/vscode-intelephense-client/1.17.0/vspackage --extra-experimental-features nix-command
 
     lmstudio
 
