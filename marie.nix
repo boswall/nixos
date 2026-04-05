@@ -261,7 +261,7 @@
     php84
     php84Packages.composer
     php84Packages.php-codesniffer
-    nodejs_20
+    nodejs_24
     dbeaver-bin
     firefox
     google-chrome
@@ -360,6 +360,15 @@
     remotePlay.openFirewall = true; # Open ports in the firewall for Steam Remote Play
     dedicatedServer.openFirewall = true; # Open ports in the firewall for Source Dedicated Server
     localNetworkGameTransfers.openFirewall = true; # Open ports in the firewall for Steam Local Network Game Transfers
+  };
+
+  # Tailscale
+  services.tailscale = {
+    # Enable tailscale at startup
+    enable = true;
+
+    # If you would like to use a preauthorized key
+    #authKeyFile = "/run/secrets/tailscale_key";
   };
 
   # Enable the OpenSSH daemon.
