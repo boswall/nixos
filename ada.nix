@@ -3,8 +3,10 @@
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
 { config, pkgs, ... }:
-
-{
+# Import nixpkgs.unstable for selective packages
+let
+  unstable = import <nixos-unstable> { };
+in {
   #imports =
   #  [ # Include the results of the hardware scan.
   #    ./hardware-configuration.nix
@@ -97,22 +99,22 @@
     }
   ];
 
- systemd.automounts = [
-   {
-     wantedBy = [ "multi-user.target" ];
-     automountConfig = {
-       TimeoutIdleSec = "600";
-     };
-     where = "/mnt/tower/work";
-   }
-   {
-     wantedBy = [ "multi-user.target" ];
-     automountConfig = {
-       TimeoutIdleSec = "600";
-     };
-     where = "/mnt/tower/files";
-   }
- ];
+systemd.automounts = [
+  {
+    wantedBy = [ "multi-user.target" ];
+    automountConfig = {
+      TimeoutIdleSec = "600";
+    };
+    where = "/mnt/tower/work";
+  }
+  {
+    wantedBy = [ "multi-user.target" ];
+    automountConfig = {
+      TimeoutIdleSec = "600";
+    };
+    where = "/mnt/tower/files";
+  }
+];
 
   # NVIDIA Drivers
   hardware.graphics = {
@@ -222,7 +224,7 @@
 ⠀⠀⠈⠛⠿⢿⣿⣿⣿⡿⠿⠟⠋⠀⠀⠀⢀⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠁⠀\$2⠸⠿⠿⠿⠇\$1⠀⠀⠀⠀
 
             \$2GOOD  LIFE  PLUS\$1
- '";
+'";
         ohMyZsh = {
           enable = true;
           theme = "robbyrussell";
@@ -307,19 +309,19 @@
     thunderbird
     bruno
     haruna
-    opencode
+    unstable.opencode
     qwen-code
     warp-terminal
     (vscode-with-extensions.override {
       vscode = vscodium;
       vscodeExtensions = with vscode-extensions; [
-       bbenoist.nix
-       eamodio.gitlens
-       catppuccin.catppuccin-vsc
-       #onecentlin.laravel-blade
-       pkief.material-icon-theme
-       #quick-lint.quick-lint-js
-       bradlc.vscode-tailwindcss
+      bbenoist.nix
+      eamodio.gitlens
+      catppuccin.catppuccin-vsc
+      #onecentlin.laravel-blade
+      pkief.material-icon-theme
+      #quick-lint.quick-lint-js
+      bradlc.vscode-tailwindcss
       ] ++ pkgs.vscode-utils.extensionsFromVscodeMarketplace [
         {
           name = "laravel-extra-intellisense";
@@ -450,5 +452,4 @@
   system.autoUpgrade = {
     enable = true;
   };
-
 }
