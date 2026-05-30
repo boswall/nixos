@@ -171,15 +171,12 @@
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
-  #  vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
-  #  wget
     virtualgl
     pciutils
     wayland-utils
     vulkan-tools
     inxi
     git
-    lmstudio
     airshipper
     dolphin-emu
     (prismlauncher.override {
@@ -197,14 +194,14 @@
       pcsx2
       scummvm
     ]))
-    (pkgs.wrapOBS {
-      plugins = with pkgs.obs-studio-plugins; [
-        wlrobs
-        obs-backgroundremoval
-        obs-pipewire-audio-capture
-      ];
-    })
-    kdePackages.kdenlive
+#     (pkgs.wrapOBS {
+#       plugins = with pkgs.obs-studio-plugins; [
+#         wlrobs
+#         obs-backgroundremoval
+#         obs-pipewire-audio-capture
+#       ];
+#     })
+#     kdePackages.kdenlive
   ];
 
   programs.steam = {
