@@ -14,7 +14,11 @@
     "splash"
     "amd_iommu=on"
     "iommu=pt"
+    "mitigations=off"
+    "tsc=unstable"
+    "idle=nomwait"
   ];
+  boot.kernelPackages = pkgs.linuxPackages_6_6;
 
   networking.hostName = "taylor"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
@@ -175,13 +179,15 @@
     vulkan-tools
     inxi
     git
+    lmstudio
     airshipper
     dolphin-emu
     (prismlauncher.override {
       jdks = [
-        temurin-bin
-        temurin-bin-23
-        temurin-bin-8
+        javaPackages.compiler.temurin-bin.jre-25
+        javaPackages.compiler.temurin-bin.jre-21
+        javaPackages.compiler.temurin-bin.jre-17
+        javaPackages.compiler.temurin-bin.jre-8
       ];
     })
     (retroarch.withCores (cores: with cores; [
@@ -217,6 +223,9 @@
   # };
 
   # List services that you want to enable:
+
+  # Flatpak
+  services.flatpak.enable = true;
 
   # Enable the OpenSSH daemon.
   # services.openssh.enable = true;
