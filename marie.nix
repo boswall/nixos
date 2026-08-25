@@ -285,6 +285,7 @@
     inkscape
     thunderbird
     bruno
+    opencode
     qwen-code
     (vscode-with-extensions.override {
       vscode = vscodium;
