@@ -14,19 +14,23 @@
     "splash"
     "amd_iommu=on"
     "iommu=pt"
+    "mitigations=off"
+    "tsc=unstable"
+    "idle=nomwait"
   ];
+  boot.kernelPackages = pkgs.linuxPackages_6_6;
 
   networking.hostName = "taylor"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
   # Power - disallow sleep
   powerManagement.enable = false;
-  systemd.sleep.extraConfig = ''
-    AllowSuspend=no
-    AllowHibernation=no
-    AllowHybridSleep=no
-    AllowSuspendThenHibernate=no
-  '';
+  systemd.sleep.settings.Sleep = {
+    AllowSuspend = "no";
+    AllowHibernation = "no";
+    AllowHybridSleep = "no";
+    AllowSuspendThenHibernate = "no";
+  };
 
   # Configure network proxy if necessary
   # networking.proxy.default = "http://user:password@proxy:port/";
@@ -102,8 +106,8 @@
     nvidiaSettings = true;
 
     # Optionally, you may need to select the appropriate driver version for your specific GPU.
-    #package = config.boot.kernelPackages.nvidiaPackages.legacy_470;
-    package = config.boot.kernelPackages.nvidiaPackages.production;
+    package = config.boot.kernelPackages.nvidiaPackages.legacy_580;
+    #package = config.boot.kernelPackages.nvidiaPackages.production;
   };
 
   # Configure keymap in X11
@@ -167,8 +171,6 @@
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
-  #  vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
-  #  wget
     virtualgl
     pciutils
     wayland-utils
@@ -179,9 +181,10 @@
     dolphin-emu
     (prismlauncher.override {
       jdks = [
-        temurin-bin
-        temurin-bin-23
-        temurin-bin-8
+        javaPackages.compiler.temurin-bin.jre-25
+        javaPackages.compiler.temurin-bin.jre-21
+        javaPackages.compiler.temurin-bin.jre-17
+        javaPackages.compiler.temurin-bin.jre-8
       ];
     })
     (retroarch.withCores (cores: with cores; [
@@ -191,14 +194,14 @@
       pcsx2
       scummvm
     ]))
-    (pkgs.wrapOBS {
-      plugins = with pkgs.obs-studio-plugins; [
-        wlrobs
-        obs-backgroundremoval
-        obs-pipewire-audio-capture
-      ];
-    })
-    kdePackages.kdenlive
+#     (pkgs.wrapOBS {
+#       plugins = with pkgs.obs-studio-plugins; [
+#         wlrobs
+#         obs-backgroundremoval
+#         obs-pipewire-audio-capture
+#       ];
+#     })
+#     kdePackages.kdenlive
   ];
 
   programs.steam = {
@@ -217,6 +220,9 @@
   # };
 
   # List services that you want to enable:
+
+  # Flatpak
+  services.flatpak.enable = true;
 
   # Enable the OpenSSH daemon.
   # services.openssh.enable = true;
