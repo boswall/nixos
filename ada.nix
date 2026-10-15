@@ -56,7 +56,7 @@ in {
   };
   networking.firewall = {
     enable = true;
-    allowedTCPPorts = [ 80 443 1234 9001 9002 ];
+    allowedTCPPorts = [ 80 443 1234 9001 9002 24800 ];
     extraCommands = ''
       # Redirect port 80 to 9001
       iptables -t nat -A PREROUTING -p tcp --dport 80 -j REDIRECT --to-ports 9001
@@ -187,12 +187,21 @@ systemd.automounts = [
     alsa.enable = true;
     alsa.support32Bit = true;
     pulse.enable = true;
+    wireplumber.enable = true;
+
     # If you want to use JACK applications, uncomment this
     #jack.enable = true;
 
     # use the example session manager (no others are packaged yet so this is enabled by default,
     # no need to redefine it in your config for now)
     #media-session.enable = true;
+  };
+
+  # Enable XDG Desktop Portal for screen sharing
+  xdg.portal = {
+    enable = true;
+    extraPortals = [ pkgs.kdePackages.xdg-desktop-portal-kde ]; # Standard fallback
+    config.common.default = "*";
   };
 
     # Fonts
@@ -212,19 +221,19 @@ systemd.automounts = [
         autosuggestions.enable = true;
         zsh-autoenv.enable = true;
         syntaxHighlighting.enable = true;
-        shellInit = "fastfetch --data ' \$1
-⠀⠀⠀⠀⢀⣠⣴⣶⣿⣿⣿⣿⣷⣶⣄⡀⠀⠀⠀⢰⣶⣶⣶⣶⠀⠀⠀⠀⠀⠀⠀⠀\$2⣴⣶⣶⣶\$1⠀⠀⠀⠀
-⠀⠀⢀⣴⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⡄⠀⠀⣼⣿⣿⣿⡏⠀⠀⠀⠀⠀⠀⠀⠀\$2⣿⣿⣿⡟\$1⠀⠀⠀⠀
-⠀⣰⣿⣿⣿⣿⡿⠟⠋⠉⠙⠻⣿⣿⣿⣿⣿⡀⢀⣿⣿⣿⣿⠃⠀⠀⠀⠀⠀⠀⠀\$2⢸⣿⣿⣿⡇\$1⠀⠀⠀⠀
-⢰⣿⣿⣿⣿⠏⠀⠀⠀⠀⠀⠀⠈⠉⠉⠉⠉⠁⢸⣿⣿⣿⣿⠀⠀⠀\$2⢠⣤⣤⣤⣤⣼⣿⣿⣿⣤⣤⣤⣤⡤\$1
-⣿⣿⣿⣿⡟⠀⠀⠀⢠⣿⣿⣿⣿⣿⣿⣿⣿⠃⣾⣿⣿⣿⡇⠀⠀⠀\$2⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡇\$1
-⣿⣿⣿⣿⣷⠀⠀⠀⢸⣿⣿⣿⣿⣿⣿⣿⡟⢀⣿⣿⣿⣿⠃⠀⠀\$2⠐⠛⠛⠛⠛⢻⣿⣿⣿⡟⠛⠛⠛⠛⠃\$1
-⢻⣿⣿⣿⣿⣷⣄⣀⣀⣠⣴⣾⣿⣿⣿⡿⠁⢸⣿⣿⣿⣿⣀⣀⣀⣀⣀⣀⠀⠀\$2⣾⣿⣿⣿\$1⠀⠀⠀⠀⠀⠀
-⠈⠻⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠟⠀⠀⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿⡇⠀\$2⢀⣿⣿⣿⡏\$1⠀⠀⠀⠀⠀⠀
-⠀⠀⠈⠛⠿⢿⣿⣿⣿⡿⠿⠟⠋⠀⠀⠀⢀⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠁⠀\$2⠸⠿⠿⠿⠇\$1⠀⠀⠀⠀
+#         shellInit = "fastfetch --data ' \$1
+# ⠀⠀⠀⠀⢀⣠⣴⣶⣿⣿⣿⣿⣷⣶⣄⡀⠀⠀⠀⢰⣶⣶⣶⣶⠀⠀⠀⠀⠀⠀⠀⠀\$2⣴⣶⣶⣶\$1⠀⠀⠀⠀
+# ⠀⠀⢀⣴⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⡄⠀⠀⣼⣿⣿⣿⡏⠀⠀⠀⠀⠀⠀⠀⠀\$2⣿⣿⣿⡟\$1⠀⠀⠀⠀
+# ⠀⣰⣿⣿⣿⣿⡿⠟⠋⠉⠙⠻⣿⣿⣿⣿⣿⡀⢀⣿⣿⣿⣿⠃⠀⠀⠀⠀⠀⠀⠀\$2⢸⣿⣿⣿⡇\$1⠀⠀⠀⠀
+# ⢰⣿⣿⣿⣿⠏⠀⠀⠀⠀⠀⠀⠈⠉⠉⠉⠉⠁⢸⣿⣿⣿⣿⠀⠀⠀\$2⢠⣤⣤⣤⣤⣼⣿⣿⣿⣤⣤⣤⣤⡤\$1
+# ⣿⣿⣿⣿⡟⠀⠀⠀⢠⣿⣿⣿⣿⣿⣿⣿⣿⠃⣾⣿⣿⣿⡇⠀⠀⠀\$2⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡇\$1
+# ⣿⣿⣿⣿⣷⠀⠀⠀⢸⣿⣿⣿⣿⣿⣿⣿⡟⢀⣿⣿⣿⣿⠃⠀⠀\$2⠐⠛⠛⠛⠛⢻⣿⣿⣿⡟⠛⠛⠛⠛⠃\$1
+# ⢻⣿⣿⣿⣿⣷⣄⣀⣀⣠⣴⣾⣿⣿⣿⡿⠁⢸⣿⣿⣿⣿⣀⣀⣀⣀⣀⣀⠀⠀\$2⣾⣿⣿⣿\$1⠀⠀⠀⠀⠀⠀
+# ⠈⠻⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠟⠀⠀⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿⡇⠀\$2⢀⣿⣿⣿⡏\$1⠀⠀⠀⠀⠀⠀
+# ⠀⠀⠈⠛⠿⢿⣿⣿⣿⡿⠿⠟⠋⠀⠀⠀⢀⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠁⠀\$2⠸⠿⠿⠿⠇\$1⠀⠀⠀⠀
 
-            \$2GOOD  LIFE  PLUS\$1
-'";
+#             \$2GOOD  LIFE  PLUS\$1
+# '";
         ohMyZsh = {
           enable = true;
           theme = "robbyrussell";
@@ -299,9 +308,10 @@ systemd.automounts = [
     libreoffice-qt
     hunspell
     hunspellDicts.en_GB-ise
+    unstable.deskflow
     slack
     #whatsapp-for-linux
-    # teams-for-linux
+    teams-for-linux
     zoom-us
     supersonic-wayland
     jellyfin-media-player
@@ -311,6 +321,7 @@ systemd.automounts = [
     haruna
     unstable.opencode
     qwen-code
+    claude-code
     warp-terminal
     (vscode-with-extensions.override {
       vscode = vscodium;
@@ -385,6 +396,9 @@ systemd.automounts = [
 
   # OpenRGB
   # services.hardware.openrgb.enable = true;
+
+  # Twingate for GL SSH
+  services.twingate.enable = true;
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
